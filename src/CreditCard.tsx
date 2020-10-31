@@ -91,6 +91,11 @@ interface CardData {
 }
 
 interface CreditCardProps {
+  labels?: {
+    holder?: string;
+    expiration?: string;
+    cvv?: string;
+  };
   placeholders?: {
     number?: string;
     holder?: string;
@@ -121,6 +126,7 @@ const CreditCard = React.forwardRef<CreditCardType, CreditCardProps>(
   (
     {
       placeholders,
+      labels,
       background,
       textColor,
       errorTextColor,
@@ -348,7 +354,7 @@ const CreditCard = React.forwardRef<CreditCardType, CreditCardProps>(
               {!!cardConfig.brandImage && (
                 <Animatable.Image
                   source={cardConfig.brandImage}
-                  animation="slideInRight"
+                  animation="fadeIn"
                   duration={400}
                   useNativeDriver
                 />
@@ -356,7 +362,7 @@ const CreditCard = React.forwardRef<CreditCardType, CreditCardProps>(
               {!!(!cardConfig.brandImage && cardConfig.brandName) && (
                 <Animatable.Text
                   style={[styles.textData, textStyle]}
-                  animation="slideInRight"
+                  animation="fadeIn"
                   duration={400}
                 >
                   {cardConfig.brandName}
@@ -396,7 +402,7 @@ const CreditCard = React.forwardRef<CreditCardType, CreditCardProps>(
             <View style={styles.footer}>
               <View style={styles.holderWrapper}>
                 <Text style={[styles.textLabel, textStyle]}>
-                  TITULAR DO CARTÃO
+                  {labels.holder}
                 </Text>
                 <CardInput
                   placeholderTextColor={placeholderTextColor}
@@ -418,7 +424,7 @@ const CreditCard = React.forwardRef<CreditCardType, CreditCardProps>(
                 />
               </View>
               <View style={styles.expirationWrapper}>
-                <Text style={[styles.textLabel, textStyle]}>VENCIMENTO</Text>
+                <Text style={[styles.textLabel, textStyle]}>{labels.expiration}</Text>
                 <CardInput
                   placeholderTextColor={placeholderTextColor}
                   name="expiration"
@@ -462,7 +468,7 @@ const CreditCard = React.forwardRef<CreditCardType, CreditCardProps>(
               <Image source={Images.icons.rotate} />
             </TouchableOpacity>
             <View style={styles.cvvWrapper} pointerEvents="box-none">
-              <Text style={[styles.textLabel, textStyle]}>Cód. Segurança</Text>
+              <Text style={[styles.textLabel, textStyle]}>{labels.cvv}</Text>
               <CardInput
                 placeholderTextColor={placeholderTextColor}
                 name="cvv"
@@ -493,9 +499,14 @@ const CreditCard = React.forwardRef<CreditCardType, CreditCardProps>(
 );
 
 CreditCard.defaultProps = {
+  labels: {
+    holder: 'Holder name',
+    expiration: 'Expires',
+    cvv: 'CVV code',
+  },
   placeholders: {
     number: '0000 0000 0000 0000',
-    holder: 'TITULAR DO CARTÃO',
+    holder: 'ENTER HOLDER NAME',
     expiration: 'MM/YYYY',
     cvv: '000',
   },
